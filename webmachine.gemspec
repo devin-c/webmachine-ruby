@@ -14,14 +14,14 @@ Gem::Specification.new do |gem|
   gem.authors = ["Sean Cribbs"]
   gem.email = ["sean@basho.com"]
 
-  gem.add_runtime_dependency(%q<i18n>, [">= 0.4.0"])
-  gem.add_runtime_dependency(%q<multi_json>)
-  gem.add_runtime_dependency(%q<as-notifications>, ["~> 1.0"])
-  gem.add_development_dependency(%q<rspec>, ["~> 2.12.0"])
-  gem.add_development_dependency(%q<yard>, ["~> 0.7.3"])
-  gem.add_development_dependency(%q<rake>)
-  gem.add_development_dependency(%q<rack>)
-  gem.add_development_dependency(%q<rack-test>)
+  gem.add_runtime_dependency('i18n', ">= 0.4.0")
+  gem.add_runtime_dependency('multi_json')
+  gem.add_runtime_dependency('as-notifications', "~> 1.0")
+  gem.add_development_dependency('rspec', "~> 2.12.0")
+  gem.add_development_dependency('yard', "~> 0.7.3")
+  gem.add_development_dependency('rake')
+  gem.add_development_dependency('rack')
+  gem.add_development_dependency('rack-test')
 
   ignores = File.read(".gitignore").split(/\r?\n/).reject{ |f| f =~ /^(#.+|\s*)$/ }.map {|f| Dir[f] }.flatten
   gem.files = (Dir['**/*','.gitignore'] - ignores).reject {|f| !File.file?(f) }

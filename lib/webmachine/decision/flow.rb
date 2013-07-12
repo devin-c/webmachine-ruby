@@ -143,11 +143,11 @@ module Webmachine
 
       # Accept exists?
       def c3
-        if !request.accept
+        if request.accept
+          :c4
+        else
           metadata['Content-Type'] = MediaType.parse(resource.content_types_provided.first.first)
           :d4
-        else
-          :c4
         end
       end
 
@@ -155,25 +155,23 @@ module Webmachine
       def c4
         types = resource.content_types_provided.map {|pair| pair.first }
         chosen_type = choose_media_type(types, request.accept)
-        if !chosen_type
-          406
-        else
+        if chosen_type
           metadata['Content-Type'] = chosen_type
           :d4
+        else
+          406
         end
       end
 
       # Accept-Language exists?
       def d4
-        if !request.accept_language
-          if language = choose_language(resource.languages_provided, "*")
-            resource.language_chosen(language)
-            :e5
-          else
-            406
-          end
-        else
+        if request.accept_language
           :d5
+        elsif language = choose_language(resource.languages_provided, "*")
+          resource.language_chosen(language)
+          :e5
+        else
+          406
         end
       end
 
@@ -189,10 +187,10 @@ module Webmachine
 
       # Accept-Charset exists?
       def e5
-        if !request.accept_charset
-          choose_charset(resource.charsets_provided, "*") ? :f6 : 406
-        else
+        if request.accept_charset
           :e6
+        else
+          choose_charset(resource.charsets_provided, "*") ? :f6 : 406
         end
       end
 
@@ -209,10 +207,10 @@ module Webmachine
           chosen_type.params['charset'] = chosen_charset
         end
         response.headers['Content-Type'] = chosen_type.to_s
-        if !request.accept_encoding
-          choose_encoding(resource.encodings_provided, "identity;q=1.0,*;q=0.5") ? :g7 : 406
-        else
+        if request.accept_encoding
           :f7
+        else
+          choose_encoding(resource.encodings_provided, "identity;q=1.0,*;q=0.5") ? :g7 : 406
         end
       end
 
@@ -497,7 +495,7 @@ module Webmachine
 
       # New resource?
       def p11
-        !response.headers["Location"] ? :o20 : 201
+        response.headers["Location"] ? 201 : :o20
       end
 
     end # module Flow
